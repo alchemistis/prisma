@@ -16,7 +16,7 @@ namespace Prisma.Api.Services
 
         public async Task StoreAsync(string url)
         {
-            var torrent = await DownloadTorrentFileAsync(url);
+            var torrent = TorrentClient.IsMagnetLink(url) ? url : await DownloadTorrentFileAsync(url);
             await _torrentClient.DownloadAsync(torrent);
         }
 
@@ -31,10 +31,9 @@ namespace Prisma.Api.Services
             var disposition = dispositionList!.First();
             var contentDisposition = new ContentDisposition(disposition);
 
-            var contentStream = response.Content.ReadAsStream();
+            var contentStream = await response.Content.ReadAsStreamAsync();
 
-            var fileName = contentDisposition?.FileName ?? $"Untitled-{DateTime.Now}.torrent";
-
+            var fileName = contentDisposition.FileName ?? $"Untitled-{DateTime.Now}.torrent";
             var targetPath = Path.Combine("Media", fileName);
 
             using var fs = new FileStream(targetPath, FileMode.Create, FileAccess.ReadWrite);

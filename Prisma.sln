@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prisma.Providers", "src\Pri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prisma.Application", "src\Prisma.Application\Prisma.Application.csproj", "{386787BD-7E64-4F2E-969E-96CA5DCB59EA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prisma.Data", "src\Prisma.Data\Prisma.Data.csproj", "{8FBE1C87-0C8C-44B6-955C-708F51B4A580}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{386787BD-7E64-4F2E-969E-96CA5DCB59EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{386787BD-7E64-4F2E-969E-96CA5DCB59EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{386787BD-7E64-4F2E-969E-96CA5DCB59EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FBE1C87-0C8C-44B6-955C-708F51B4A580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FBE1C87-0C8C-44B6-955C-708F51B4A580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FBE1C87-0C8C-44B6-955C-708F51B4A580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FBE1C87-0C8C-44B6-955C-708F51B4A580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

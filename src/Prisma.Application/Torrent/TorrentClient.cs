@@ -12,9 +12,20 @@ namespace Prisma.Application.Torrent
             _clientEngine = new ClientEngine();
         }
 
-        public async Task DownloadAsync(string torrentFilePath)
+        public async Task DownloadAsync(string metadata)
         {
-            var manager = await _clientEngine.AddAsync(torrentFilePath, Path.Combine(Environment.CurrentDirectory, "Downloads"));
+            TorrentManager manager;
+            var downloadPath = Path.Combine(Environment.CurrentDirectory, "Downloads");
+
+            if (IsMagnetLink(metadata))
+            {
+                var magnet = MagnetLink.Parse(metadata);
+                manager = await _clientEngine.AddStreamingAsync(magnet, downloadPath);
+            }
+            else
+            {
+                manager = await _clientEngine.AddAsync(metadata, downloadPath);
+            }
 
             manager.TorrentStateChanged += async (s, e) =>
             {
@@ -27,7 +38,7 @@ namespace Prisma.Application.Torrent
                         while (manager.Progress < 100)
                         {
                             Console.WriteLine($"{manager.Torrent.Name} progress: {string.Format("{0:F1}", manager.Progress)}%");
-                            await Task.Delay(10000);
+                            await Task.Delay(TimeSpan.FromSeconds(10));
                         }
                     });
                 }
@@ -37,6 +48,11 @@ namespace Prisma.Application.Torrent
             };
 
             await manager.StartAsync();
+        }
+
+        public static bool IsMagnetLink(string url)
+        {
+            return url.StartsWith("magnet:");
         }
     }
 }

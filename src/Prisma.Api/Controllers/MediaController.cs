@@ -1,4 +1,5 @@
 using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Prisma.Api.Services;
 using Prisma.Core;
@@ -7,24 +8,30 @@ namespace Prisma.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class MediaController : ControllerBase
     {
         private readonly ILogger<MediaController> _logger;
-        private readonly IMediaProvider<Media> _provider;
+        private readonly ProviderSelector _selector;
         private readonly IMediaStorageService _mediaStorageService;
 
-        public MediaController(ILogger<MediaController> logger, IMediaProvider<Media> provider,
+        public MediaController(ILogger<MediaController> logger, ProviderSelector selector,
             IMediaStorageService mediaStorageService)
         {
             _logger = logger;
-            _provider = provider;
+            _selector = selector;
             _mediaStorageService = mediaStorageService;
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<Media>> Get(string name)
+        public async Task<ActionResult<Media>> Get(string name, string providerName = "yts")
         {
-            var movies = await _provider.GetAllByName(name);
+            var provider =_selector.SelectProvider(providerName);
+
+            if (provider is null)
+                return BadRequest();
+
+            var movies = await provider.GetAllByName(name);
             return Ok(movies);
         }
 
